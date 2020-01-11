@@ -1,6 +1,7 @@
 module Parser
 
 open System
+open Microsoft.FSharp.Quotations
 
 let safeEquals (it : string) (theOther : string) =
     String.Equals(it, theOther, StringComparison.OrdinalIgnoreCase)
