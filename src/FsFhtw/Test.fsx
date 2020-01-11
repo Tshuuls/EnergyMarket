@@ -61,9 +61,9 @@ let addEnergyProducerToMarket (gen : EnergyProducer) (market:EnergyMarket) : Ene
 
 let addParticipantToMarket (participant: MarketParticipant) (market:EnergyMarket) =
     match participant with
-    |Generator g -> 
-    |Prosumer p -> addToList p market.marketProsumers
-    |Load l -> addToList l market.marketConsumers
+    |Generator g -> ()
+    |Prosumer p -> ()
+    |Load l -> ()
 
 
 
