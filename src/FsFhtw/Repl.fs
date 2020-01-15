@@ -50,6 +50,17 @@ let print (state : State, outputToPrint : string) =
 let rec loop (state : State) =
     Console.ReadLine()
     |> read
-    |> evaluate Domain.update state
+    |> evaluate Domain.update state 
     |> print
     |> loop
+
+//repl hält liste von prosumer+spieler
+//domain.processProducer
+//randomized prosumer+spieler
+//print energy and price
+//bei prosumer -> domain.processProsumer id market -> market
+//print energy and price
+//bei spieler -> print money and energy 
+//read spieler desicion -> domain.processPlayer desicion market -> market
+//process restliche prosumer -> domain.processProsumer id
+//domain.processConsumer
