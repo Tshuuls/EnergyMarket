@@ -172,7 +172,7 @@ let prosumerSellsToMarket (pro : EnergyProsumer) (market:EnergyMarket)  =
 
 let proceesProsumerIndexForMarket (index : int) (market:EnergyMarket)  =
     let pro = List.item index market.marketProsumers 
-    if(market.energyPrice < pro.buyingPrice && pro.storageCapacity>pro.storedEnergy) then
+    if(market.energyPrice < pro.buyingPrice && pro.storageCapacity>pro.storedEnergy && market.excessEnergy>EnergyQuantity.OfInt 0) then
                         prosumerBuyesFromMarket pro market
                      elif(market.energyPrice > pro.sellingPrice && pro.storedEnergy>EnergyQuantity.OfInt 0) then
                         prosumerSellsToMarket pro market
@@ -192,7 +192,7 @@ let proceesProsumersIn (market:EnergyMarket) =
 
 let proceesConsumersForMarket (load : EnergyConsumer) (market:EnergyMarket)  =
     if market.excessEnergy < load.consumedEnergy then
-                failwith "That won't do, friend."
+                failwith "Game Over!! To less Energy - Net Collapsed"
     updateEnergyPrice {market with excessEnergy = market.excessEnergy - load.consumedEnergy}
 
 let processConsumersIn (market:EnergyMarket)  =
