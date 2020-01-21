@@ -225,7 +225,7 @@ let processPlayerIn (market:EnergyMarket) (action:PlayerAction) =
     | Buy x -> playerBuysOf market x
     | Sell x -> playerSellsTo market x
 
-let init ()  =
+let initwithValues ()  =
     let player1 = {
         storedEnergy = EnergyQuantity.OfInt 8
         storageCapacity =EnergyQuantity.OfInt 5000

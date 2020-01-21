@@ -43,8 +43,8 @@ let rec loop (market : Domain.EnergyMarket) =
     |> Domain.processConsumersIn  
     |>printMarket
     |>loop
-   
-let init ()=
+
+let configureValues()=
     printfn "\n\nConfigure Producer\nEnter Produced Energy"
     let producer = Domain.Generator ({producedEnergy = Domain.EnergyQuantity.OfInt (Console.ReadLine() |> int )})
     
@@ -119,7 +119,18 @@ let init ()=
     Domain.addParticipantToMarket (producer) marketA
     |>Domain.addParticipantToMarket (consumer) 
     |>Domain.addParticipantToMarket (Domain.Prosumer pros1) 
-    |>Domain.addParticipantToMarket (Domain.Prosumer pros2) 
+    |>Domain.addParticipantToMarket (Domain.Prosumer pros2)  
+
+let init ()=
+    printfn "Press 1 to generate Market, Press 2 to configure Market"
+    let input =Console.ReadLine() |> int
+    if (input=1)then
+       Domain.initwithValues()
+    else if  (input=2)then
+       configureValues()
+    else
+       Domain.initwithValues()
+    
 
 
 (*let pro2 :EnergyProsumer = {
