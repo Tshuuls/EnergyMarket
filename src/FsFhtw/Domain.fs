@@ -8,8 +8,7 @@ type Message =
     | IncrementBy of int
     | DecrementBy of int
 
-let init () : State =
-    0
+
 
 let update (msg : Message) (model : State) : State =
     match msg with
@@ -115,6 +114,7 @@ type EnergyMarket =
         energyPrice : Money
         maxEnergyPrice : Money
         minEnergyPrice : Money
+        player : Player
     }
 
 let addEnergyProducerToMarket (gen : EnergyProducer) (market:EnergyMarket) : EnergyMarket =
@@ -224,32 +224,73 @@ let processConsumersIn (market:EnergyMarket)  =
     List.foldBack proceesConsumersForMarket market.marketConsumers market
 
 
-let playerBuysOf  (market:EnergyMarket) (player:Player) (amount:EnergyQuantity) =
+let playerBuysOf  (market:EnergyMarket) (amount:EnergyQuantity) =
     let price = MoneyTimesQuantity market.energyPrice  amount
-    let amountPossibleStorage = player.storageCapacity-player.storedEnergy
-    if(player.moneytoSpend >= price && amount < amountPossibleStorage) then
+    let amountPossibleStorage = market.player.storageCapacity-market.player.storedEnergy
+    if(market.player.moneytoSpend >= price && amount < amountPossibleStorage) then
         let marketNew = {market with excessEnergy = market.excessEnergy-amount} |> updateEnergyPrice 
-        let playerNew = {player with storedEnergy = player.storedEnergy + amount; moneytoSpend = player.moneytoSpend - price}
-        (marketNew,playerNew)
+        let playerNew = {market.player with storedEnergy = market.player.storedEnergy + amount; moneytoSpend = market.player.moneytoSpend - price}
+        let merketnewnew={market with player=playerNew}
+        merketnewnew
     else
-        (market,player)
+        market
 
 
-let playerSellsTo  (market:EnergyMarket) (player:Player) (amount:EnergyQuantity) =
+let playerSellsTo  (market:EnergyMarket) (amount:EnergyQuantity) =
     let price = MoneyTimesQuantity market.energyPrice  amount
     let amountPossibleStorage = market.storageCapacity-market.excessEnergy
-    if(amount < amountPossibleStorage && amount < player.storedEnergy) then
+    if(amount < amountPossibleStorage && amount < market.player.storedEnergy) then
         let marketNew = {market with excessEnergy = market.excessEnergy+amount} |> updateEnergyPrice 
-        let playerNew = {player with storedEnergy = player.storedEnergy - amount; moneytoSpend = player.moneytoSpend + price}
-        (marketNew,playerNew)
+        let playerNew = {market.player with storedEnergy = market.player.storedEnergy - amount; moneytoSpend = market.player.moneytoSpend + price}
+        let merketnewnew={market with player=playerNew}
+        merketnewnew
     else
-        (market,player)
+        market
         
 
-let processPlayerIn (market:EnergyMarket) (player:Player) (action:PlayerAction) =
+let processPlayerIn (market:EnergyMarket) (action:PlayerAction) =
     match action with
-    | Buy x -> playerBuysOf market player x
-    | Sell x -> playerSellsTo market player x
+    | Buy x -> playerBuysOf market x
+    | Sell x -> playerSellsTo market x
+
+let init ()  =
+    let player1 = {
+        storedEnergy = EnergyQuantity.OfInt 8
+        storageCapacity =EnergyQuantity.OfInt 5000
+        moneytoSpend = Money.OfDecimal 50000M
+        }
+    let marketA :EnergyMarket ={
+     marketProducers = []
+     marketProsumers = []
+     marketConsumers = []
+     excessEnergy = EnergyQuantity.OfInt 25
+     storageCapacity =EnergyQuantity.OfInt 500
+     energyPrice = Money.OfDecimal (501M - 25M)
+     maxEnergyPrice = Money.OfDecimal 500M
+     minEnergyPrice = Money.OfDecimal 1M
+     player =player1
+    }
+
+    let pro1 :EnergyProsumer = {
+      id =1
+      storedEnergy = EnergyQuantity.OfInt 200
+      storageCapacity = EnergyQuantity.OfInt 400
+      buyingPrice = Money.OfDecimal 200M
+      sellingPrice =Money.OfDecimal 300M
+      moneytoSpend = Money.OfDecimal 200M
+    }
+    let gen1  = {producedEnergy = EnergyQuantity.OfInt 6}
+    let part1 = Generator gen1
+    let part2 = Load {consumedEnergy = EnergyQuantity.OfInt 5}
+    let part3 = Prosumer pro1
+    let list2 = gen1::marketA.marketProducers
+
+    let marketB = addParticipantToMarket part1 marketA
+    let marketC = addParticipantToMarket part2 marketB
+    let marketD = addParticipantToMarket part3 marketC
+    
+    marketD
+
 
 
 (* 
