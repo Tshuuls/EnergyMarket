@@ -43,7 +43,10 @@ type Money =
         else
             Money (a - b)
     static member (/) ((Money a), (Money b)) =
-            decimal (a / b)
+            if b = 0M then
+                0M
+            else
+                decimal (a / b)
     static member (*) ((Money a), ( b:decimal)) =
             Money (a * b)
 
@@ -192,7 +195,7 @@ let proceesProsumersIn (market:EnergyMarket) =
 
 let proceesConsumersForMarket (load : EnergyConsumer) (market:EnergyMarket)  =
     if market.excessEnergy < load.consumedEnergy then
-                failwith "Game Over!! To less Energy - Net Collapsed"
+                failwith "Game Over!! Not enough Energy - Net Collapsed"
     updateEnergyPrice {market with excessEnergy = market.excessEnergy - load.consumedEnergy}
 
 let processConsumersIn (market:EnergyMarket)  =
