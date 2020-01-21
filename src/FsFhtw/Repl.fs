@@ -44,6 +44,93 @@ let rec loop (market : Domain.EnergyMarket) =
     |>printMarket
     |>loop
    
+let init ()=
+    printfn "\n\nConfigure Producer\nEnter Produced Energy"
+    let producer = Domain.Generator ({producedEnergy = Domain.EnergyQuantity.OfInt (Console.ReadLine() |> int )})
+    
+    printfn "\n\nConfigure Prosumer\nEnter stored Energy"
+    let storedEnergy=Domain.EnergyQuantity.OfInt(Console.ReadLine() |> int )
+    printfn "Enter storage Capacity"
+    let storageCapacity=Domain.EnergyQuantity.OfInt(Console.ReadLine() |> int )
+    printfn "Enter buying Price"
+    let buyingPrice=Domain.Money.OfDecimal(Console.ReadLine() |> decimal )
+    printfn "Enter selling Price"
+    let sellingPrice=Domain.Money.OfDecimal(Console.ReadLine() |> decimal )
+    printfn "Enter money to Spend"
+    let moneytoSpend=Domain.Money.OfDecimal(Console.ReadLine() |> decimal )
+
+    let pros1 :Domain.EnergyProsumer={
+       id =1
+       storedEnergy = storedEnergy
+       storageCapacity = storageCapacity
+       buyingPrice = buyingPrice
+       sellingPrice =sellingPrice
+       moneytoSpend = moneytoSpend
+    }
+
+    printfn "\n\nConfigure Prosumer\nEnter stored Energy"
+    let storedEnergy=Domain.EnergyQuantity.OfInt(Console.ReadLine() |> int )
+    printfn "Enter storage Capacity"
+    let storageCapacity=Domain.EnergyQuantity.OfInt(Console.ReadLine() |> int )
+    printfn "Enter buying Price"
+    let buyingPrice=Domain.Money.OfDecimal(Console.ReadLine() |> decimal )
+    printfn "Enter selling Price"
+    let sellingPrice=Domain.Money.OfDecimal(Console.ReadLine() |> decimal )
+    printfn "Enter money to Spend"
+    let moneytoSpend=Domain.Money.OfDecimal(Console.ReadLine() |> decimal )
+
+    let pros2 :Domain.EnergyProsumer={
+       id =2
+       storedEnergy = storedEnergy
+       storageCapacity = storageCapacity
+       buyingPrice = buyingPrice
+       sellingPrice =sellingPrice
+       moneytoSpend = moneytoSpend
+    }
+
+    printfn "\n\nConfigure Consumer\nEnter consumed Energy"
+    let consumer =Domain.Load {consumedEnergy = Domain.EnergyQuantity.OfInt (Console.ReadLine() |> int )} 
+
+    printfn "\n\nConfigure Player\nEnter stored Energy"
+    let storedEnergy=Domain.EnergyQuantity.OfInt(Console.ReadLine() |> int )
+    printfn "Enter storage Capacity"
+    let storageCapacity=Domain.EnergyQuantity.OfInt(Console.ReadLine() |> int )
+    printfn "Enter Money to spend"
+    let moneytoSpend=Domain.Money.OfDecimal(Console.ReadLine() |> decimal )
+
+    let player1 :Domain.Player= {
+        storedEnergy = storedEnergy
+        storageCapacity =storageCapacity
+        moneytoSpend = moneytoSpend
+    }
+
+    let marketA :Domain.EnergyMarket ={
+     marketProducers = []
+     marketProsumers = []
+     marketConsumers = []
+     excessEnergy = Domain.EnergyQuantity.OfInt 25
+     storageCapacity =Domain.EnergyQuantity.OfInt 500
+     energyPrice = Domain.Money.OfDecimal (501M - 25M)
+     maxEnergyPrice = Domain.Money.OfDecimal 500M
+     minEnergyPrice = Domain.Money.OfDecimal 1M
+     player =player1
+    }
+
+    Domain.addParticipantToMarket (producer) marketA
+    |>Domain.addParticipantToMarket (consumer) 
+    |>Domain.addParticipantToMarket (Domain.Prosumer pros1) 
+    |>Domain.addParticipantToMarket (Domain.Prosumer pros2) 
+
+
+(*let pro2 :EnergyProsumer = {
+      id =2
+      storedEnergy = EnergyQuantity.OfInt 300
+      storageCapacity = EnergyQuantity.OfInt 350
+      buyingPrice = Money.OfDecimal 100M
+      sellingPrice =Money.OfDecimal 200M
+      moneytoSpend = Money.OfDecimal 200M
+      roundplayerd = false
+    }*)
 
 
 //repl hält liste von prosumer+spieler

@@ -5,6 +5,8 @@ let main argv =
     printfn "Press CTRL+C to stop the program."
     printf "> "
 
-    Domain.init ()
+    //Domain.initwithValues ()
+    Repl.init()
     |> Repl.loop 
+
     0 // return an integer exit code

@@ -71,7 +71,6 @@ type EnergyProsumer =
         buyingPrice : Money
         sellingPrice :Money
         moneytoSpend : Money
-        roundplayerd: bool
     }
 
 type Player = 
@@ -251,7 +250,6 @@ let init ()  =
       buyingPrice = Money.OfDecimal 200M
       sellingPrice =Money.OfDecimal 300M
       moneytoSpend = Money.OfDecimal 200M
-      roundplayerd = false
     }
 
     let pro2 :EnergyProsumer = {
@@ -261,7 +259,6 @@ let init ()  =
       buyingPrice = Money.OfDecimal 100M
       sellingPrice =Money.OfDecimal 200M
       moneytoSpend = Money.OfDecimal 200M
-      roundplayerd = false
     }
 
     addParticipantToMarket (Generator ({producedEnergy = EnergyQuantity.OfInt 6})) marketA
