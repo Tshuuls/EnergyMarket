@@ -17,8 +17,8 @@ let (|Sell|Buy|Help|ParseFailed|) (input : string) =
     let parts = input.Split(' ') |> List.ofArray
     match parts with
     | [ verb ] when safeEquals verb HelpLabel -> Help
-    | [ verb; arg ] when safeEquals verb (nameof Domain.PlayerAction) ->
+    | [ verb; arg ] when safeEquals verb (nameof Domain.PlayerAction.Sell) ->
         tryParseInt arg (fun value -> Sell value)
-    | [ verb; arg ] when safeEquals verb (nameof Domain.PlayerAction) ->
+    | [ verb; arg ] when safeEquals verb (nameof Domain.PlayerAction.Buy) ->
         tryParseInt arg (fun value -> Buy value)
     | _ -> ParseFailed
